@@ -1,12 +1,13 @@
+// Set the height of the map equal to the size of window
 var winheight = $( window ).height(); 
 $("#map").css("min-height", winheight-80);
  
-/* Set the width of the side navigation to 250px */
+// Set the width of the side navigation to 250px 
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
 }
 
-/* Set the width of the side navigation to 0 */
+// Set the width of the side navigation to 0 
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
@@ -41,7 +42,7 @@ function AppViewModel() {
         this.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout((function() {
             this.setAnimation(null);
-        }).bind(this), 1400);
+        }).bind(this), 1000);
     };
 
     this.initMap = function() {
@@ -80,8 +81,7 @@ function AppViewModel() {
 
     this.initMap();
 
-    // This block appends our locations to a list using data-bind
-    // It also serves to make the filter work
+    // append locations to a list using data-bind and also serves to make the filter work
     this.myLocationsFilter = ko.computed(function() {
         var result = [];
         for (var i = 0; i < this.markers.length; i++) {

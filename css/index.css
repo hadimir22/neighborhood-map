@@ -90,6 +90,31 @@ ul:hover {
     padding: 20px;
 }
 
+.foursquare {
+    position: absolute;
+    bottom: 2px;
+    width: 60%;
+    right: 0;
+}
+
+.iw_title {
+    font-size: 1.3em;
+}
+
+.iw_subtitle {
+    font-size: 1em;
+}
+
+.iw_address_title {
+    margin-bottom: 2px;
+    font-size: .95em;
+}
+
+.iw_address {
+    margin-bottom: 0;
+    font-size: .9em;
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

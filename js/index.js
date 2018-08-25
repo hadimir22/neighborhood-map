@@ -13,7 +13,7 @@ function closeNav() {
 }
 
 // Global Variables
-var map;
+var map, clientID, clientSecret;
 
 function AppViewModel() {
     var self = this;
@@ -25,15 +25,50 @@ function AppViewModel() {
     // one infowindow which will open at the marker that is clicked, and populate based
     // on that markers position.
     this.populateInfoWindow = function(marker, infowindow) {
-        // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
-          infowindow.marker = marker;
-          infowindow.setContent('<div>' + marker.title + '</div>');
-          infowindow.open(map, marker);
-          // Make sure the marker property is cleared if the infowindow is closed.
-          infowindow.addListener('closeclick',function(){
-            infowindow.setMarker = null;
-          });
+            infowindow.setContent('');
+            infowindow.marker = marker;
+            // Foursquare API Client
+            clientID = "IZF1X3GF4XKTTGA4GF2FJP2T22JQT0PAQVEWAEUI34IXP1P2";
+            clientSecret = "53RIBPR3DGH2TC5223KMJJHVVEVAO0YD0EHGXM2OF13LG3S5";
+            // URL for Foursquare API
+            var apiUrl = 'https://api.foursquare.com/v2/venues/search?ll=' +
+                marker.lat + ',' + marker.lng + '&client_id=' + clientID +
+                '&client_secret=' + clientSecret + '&query=' + marker.title +
+                '&v=20170708' + '&m=foursquare';
+            // Foursquare API
+            $.getJSON(apiUrl).done(function(marker) {
+                var response = marker.response.venues[0];
+                self.street = response.location.formattedAddress[0];
+                self.city = response.location.formattedAddress[1];
+                self.zip = response.location.formattedAddress[3];
+                self.country = response.location.formattedAddress[4];
+                self.category = response.categories[0].shortName;
+
+                self.htmlContentFoursquare =
+                    '<h5 class="iw_subtitle">(' + self.category +')</h5>' + '<div>' +
+                    '<h6 class="iw_address_title"> Address: </h6>' +
+                    '<p class="iw_address">' + self.street + '</p>' +
+                    '<p class="iw_address">' + self.city + '</p>' +
+                    '<p class="iw_address">' + self.zip + '</p>' +
+                    '<p class="iw_address">' + self.country +
+                    '</p>' + '</div>' + '</div>';
+
+                infowindow.setContent(self.htmlContent + self.htmlContentFoursquare);
+            }).fail(function() {
+                // Send alert on error
+                alert(
+                    "something went wrong. Please refresh your page to try again."
+                );
+            });
+
+            this.htmlContent = '<div>' + '<h4 class="iw_title">' + marker.title +'</h4>';
+
+            infowindow.open(map, marker);
+
+            infowindow.addListener('closeclick', function() {
+                infowindow.marker = null;
+            });
         }
     };
 
@@ -42,14 +77,14 @@ function AppViewModel() {
         this.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout((function() {
             this.setAnimation(null);
-        }).bind(this), 1000);
+        }).bind(this), 1400);
     };
 
     this.initMap = function() {
         var mapCanvas = document.getElementById('map');
         var mapOptions = {
             center: new google.maps.LatLng(34.083656, 74.797371),
-            zoom: 12, 
+            zoom: 11
         };
         // Constructor creates a new map - only center and zoom are required.
         map = new google.maps.Map(mapCanvas, mapOptions);
@@ -81,7 +116,8 @@ function AppViewModel() {
 
     this.initMap();
 
-    // append locations to a list using data-bind and also serves to make the filter work
+    // This block appends our locations to a list using data-bind
+    // It also serves to make the filter work
     this.myLocationsFilter = ko.computed(function() {
         var result = [];
         for (var i = 0; i < this.markers.length; i++) {
@@ -100,7 +136,7 @@ function AppViewModel() {
 
 googleError = function googleError() {
     alert(
-        'coudnt load! Please refresh the page and try again!'
+        'Oops. Google Maps did not load. Please refresh the page and try again!'
     );
 };
 

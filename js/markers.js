@@ -18,9 +18,9 @@ var myLocations = [
         type: 'top picks'
     },
   {
-      title: 'tulip garden',
-         lat:34.096056, 
-         lng: 74.88003,
+      title: 'lal chowk',
+         lat:34.069832, 
+         lng: 74.809036 ,
          type: 'fun'
         },
   {

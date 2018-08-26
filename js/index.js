@@ -39,11 +39,11 @@ function AppViewModel() {
             // Foursquare API
             $.getJSON(apiUrl).done(function(marker) {
                 var response = marker.response.venues[0];
-                self.street = response.location.formattedAddress[0];
-                self.city = response.location.formattedAddress[1];
-                self.zip = response.location.formattedAddress[3];
-                self.country = response.location.formattedAddress[4];
-                self.category = response.categories[0].shortName;
+                self.street = (response.location.formattedAddress[0] || 'this data is not available');
+                self.city =( response.location.formattedAddress[1] || 'this data is not available');
+                self.zip = (response.location.formattedAddress[3] || 'this data is not available');
+                self.country = (response.location.formattedAddress[4] || 'this data is not available');
+                self.category = (response.categories[0].shortName || 'this data is not available');
 
                 self.htmlContentFoursquare =
                     '<h5 class="iw_subtitle">(' + self.category +')</h5>' + '<div>' +

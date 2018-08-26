@@ -27,3 +27,4 @@ on clicking any marker the app communicates with foursquare through their API an
 > index file 
 > readme file
  
+# THIS APP USES THE FOURSQUARE API
